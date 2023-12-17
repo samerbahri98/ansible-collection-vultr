@@ -1,0 +1,2 @@
+---
+vultr_kubernetes_versions_regex: 'v([0-9]+.){3}+[0-9]+'  # v(semver)+build

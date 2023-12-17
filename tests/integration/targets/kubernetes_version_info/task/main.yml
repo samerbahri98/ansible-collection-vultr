@@ -8,7 +8,7 @@
 - name: verify test gather vultr kubernetes version info in check mode
   ansible.builtin.assert:
     that:
-      - result.vultr_kubernetes_versions | list | count > 0
+      - result.vultr_kubernetes_versions | map('regex_search',vultr_kubernetes_versions_regex) | select('string') | list | count > 0
 
 - name: test gather vultr plan info
   vultr.cloud.kubernetes_version_info:
@@ -17,4 +17,4 @@
 - name: verify test gather vultr plan info
   ansible.builtin.assert:
     that:
-      - result.vultr_kubernetes_versions | list | count > 0
+      - result.vultr_kubernetes_versions | map('regex_search',vultr_kubernetes_versions_regex) | select('string') | list | count > 0
