@@ -61,7 +61,8 @@ vultr_api:
 vultr_kubernetes_versions:
   description: Response from Vultr API as list.
   returned: success
-  type: list[str]
+  type: list
+  elements: str
 """
 
 from ansible.module_utils.basic import AnsibleModule
