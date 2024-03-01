@@ -171,6 +171,11 @@ class AnsibleVultr:
             # Vultr has a rate limiting requests per second, try to be polite
             # Use exponential backoff plus a little bit of randomness
             backoff(retry=retry, retry_max_delay=retry_max_delay)
+        else:
+            self.module.fail_json(
+                msg='Failure while calling the Vultr API v2 with %s for "%s" with %s retries' % (method, path, retry + 1),
+                fetch_url_info=info,
+            )
 
         # Success with content
         if info["status"] in (200, 201, 202):
@@ -271,8 +276,9 @@ class AnsibleVultr:
         return resources[result_key] if resources else []
 
     def wait_for_state(self, resource, key, states, cmp="=", retries=60):
+        resource_id = resource[self.resource_key_id]
         for retry in range(0, retries):
-            resource = self.query_by_id(resource_id=resource[self.resource_key_id], skip_transform=False)
+            resource = self.query_by_id(resource_id=resource_id, skip_transform=False)
             if resource and key in resource:
                 if cmp == "=":
                     if resource[key] in states:
