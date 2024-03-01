@@ -1,0 +1,20 @@
+# GNU General Public License v3.0+ (see COPYING or https://www.gnu.org/licenses/gpl-3.0.txt)
+---
+- name: test gather vultr kubernetes versions info in check mode
+  vultr.cloud.kubernetes_version_info:
+  check_mode: true
+  register: result
+
+- name: verify test gather vultr kubernetes version info in check mode
+  ansible.builtin.assert:
+    that:
+      - result.vultr_kubernetes_versions | map('regex_search',vultr_kubernetes_versions_regex) | select('string') | list | count > 0
+
+- name: test gather vultr plan info
+  vultr.cloud.kubernetes_version_info:
+  register: result
+
+- name: verify test gather vultr plan info
+  ansible.builtin.assert:
+    that:
+      - result.vultr_kubernetes_versions | map('regex_search',vultr_kubernetes_versions_regex) | select('string') | list | count > 0
